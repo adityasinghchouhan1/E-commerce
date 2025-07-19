@@ -37,5 +37,6 @@ Router.put('/updateContectdata/:id', UpdateContectDetails)
 Router.post('/sliderdata', upload.single('image'), SliderDataController)
 Router.get('/getsliderdata', getSliderData)
 Router.delete('/deleteslider/:id', deleteSliderData)
-Router.put('/updateslider/:id', SliderdataUpdate)
+Router.put('/updateslider/:id', upload.single('image'), SliderdataUpdate)
+
 module.exports = Router

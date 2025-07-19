@@ -5,13 +5,13 @@ const SliderDataController = async (req, res) => {
     console.log('Request Body:', req.body)
     console.log('Uploaded File:', req.file)
 
-    const title = req.body.title
-    const description = req.body.description
+    // const title = req.body.title
+    // const description = req.body.description
 
     // Safely get the uploaded image filename
     const image = req.file?.filename || null
 
-    if (!image || !title || !description) {
+    if (!image) {
       return res.status(400).json({
         status: false,
         message: 'Missing required fields (image, title, or description)',
@@ -19,8 +19,8 @@ const SliderDataController = async (req, res) => {
     }
     const sliderData = new SliderData({
       image: req.file.filename, // Save as "Image" in DB
-      title,
-      description,
+      // title,
+      // description,
     })
 
     await sliderData.save() // Save to MongoDB
@@ -88,24 +88,24 @@ const deleteSliderData = async (req, res) => {
 const SliderdataUpdate = async (req, res) => {
   try {
     const { id } = req.params
-    const { title, description } = req.body
 
-    const updatedSlider = await SliderData.findByIdAndUpdate(
-      id,
-      { title, description },
-      { new: true } // return the updated document
-    )
+    const updateData = {}
+    if (req.file) {
+      updateData.image = req.file.filename
+    }
+
+    const updatedSlider = await SliderData.findByIdAndUpdate(id, updateData, {
+      new: true,
+    })
 
     if (!updatedSlider) {
       return res.status(404).json({ message: 'Slider data not found' })
     }
 
-    res
-      .status(200)
-      .json({
-        message: 'Slider data updated successfully',
-        data: updatedSlider,
-      })
+    res.status(200).json({
+      message: 'Slider data updated successfully',
+      data: updatedSlider,
+    })
   } catch (err) {
     console.error('Update error:', err)
     res.status(500).json({ message: 'Internal server error' })
