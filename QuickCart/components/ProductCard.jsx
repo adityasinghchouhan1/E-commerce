@@ -5,6 +5,8 @@ import { useAppContext } from '@/context/AppContext'
 
 const ProductCard = ({ product }) => {
   const { currency, router } = useAppContext()
+  const normalizedImagePath =
+    product?.images?.[0]?.replace(/\\/g, '/') || 'default.jpg'
 
   return (
     <div
@@ -16,15 +18,15 @@ const ProductCard = ({ product }) => {
     >
       <div className="cursor-pointer group relative bg-gray-500/10 rounded-lg w-full h-52 flex items-center justify-center">
         <Image
-          src={product.image[0]}
+          src={`http://localhost:8008/${normalizedImagePath}`}
           alt={product.name}
-          className="group-hover:scale-105 transition object-cover w-4/5 h-4/5 md:w-full md:h-full"
           width={800}
           height={800}
+          className="object-cover"
         />
-        <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
+        {/* <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
           <Image className="h-3 w-3" src={assets.heart_icon} alt="heart_icon" />
-        </button>
+        </button> */}
       </div>
 
       <p className="md:text-base font-medium pt-2 w-full truncate">

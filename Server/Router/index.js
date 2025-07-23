@@ -27,6 +27,15 @@ const {
   SliderdataUpdate,
 } = require('../Controller/SliderDataController')
 
+const {
+  addProduct,
+  getAllProducts,
+  getProductsByCategory,
+  deleteProduct,
+  updateProduct,
+  getProductbyid,
+} = require('../Controller/productController')
+
 // Contect Us Route
 Router.post('/contectus', ContectDataFunction)
 Router.get('/getcontectus', getContectData)
@@ -38,5 +47,14 @@ Router.post('/sliderdata', upload.single('image'), SliderDataController)
 Router.get('/getsliderdata', getSliderData)
 Router.delete('/deleteslider/:id', deleteSliderData)
 Router.put('/updateslider/:id', upload.single('image'), SliderdataUpdate)
+
+//product
+
+Router.post('/Product', upload.array('images', 4), addProduct)
+Router.get('/Productget/:id', getProductbyid)
+Router.get('/Productget', getAllProducts)
+Router.get('Product/category/:category', getProductsByCategory)
+Router.delete('Productdelete/:id', deleteProduct)
+Router.put('Productupdate/:id', upload.array('images', 4), updateProduct)
 
 module.exports = Router

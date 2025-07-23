@@ -2,6 +2,7 @@
 import { productsDummyData, userDummyData } from '@/assets/assets'
 import { useRouter } from 'next/navigation'
 import { createContext, useContext, useEffect, useState } from 'react'
+import axios from 'axios'
 
 export const AppContext = createContext()
 
@@ -19,7 +20,13 @@ export const AppContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({})
 
   const fetchProductData = async () => {
-    setProducts(productsDummyData)
+    try {
+      const res = await axios.get('http://localhost:8008/api/Productget') // <-- update this endpoint
+      setProducts(res.data.products)
+      console.log('Fetched Products:', res.data.products)
+    } catch (error) {
+      console.error('Error fetching products:', error)
+    }
   }
 
   const fetchUserData = async () => {
@@ -59,8 +66,8 @@ export const AppContextProvider = (props) => {
   const getCartAmount = () => {
     let totalAmount = 0
     for (const items in cartItems) {
-      let itemInfo = products.find((product) => product._id === items)
-      if (cartItems[items] > 0) {
+      const itemInfo = products.find((product) => product._id === items)
+      if (itemInfo && cartItems[items] > 0) {
         totalAmount += itemInfo.offerPrice * cartItems[items]
       }
     }

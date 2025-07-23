@@ -1,7 +1,8 @@
 'use client'
 import React, { useState } from 'react'
-import { assets } from '@/assets/assets'
+import axios from 'axios'
 import Image from 'next/image'
+import { assets } from '@/assets/assets' // ✅ Import your placeholder image
 
 const AddProduct = () => {
   const [files, setFiles] = useState([])
@@ -13,6 +14,39 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const formData = new FormData()
+    files.forEach((file) => formData.append('images', file))
+    formData.append('name', name)
+    formData.append('description', description)
+    formData.append('category', category)
+    formData.append('price', price)
+    formData.append('offerPrice', offerPrice)
+
+    try {
+      const res = await axios.post(
+        'http://localhost:8008/api/Product',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        }
+      )
+
+      if (res.data.success) {
+        alert('Product added successfully')
+        setFiles([])
+        setName('')
+        setDescription('')
+        setCategory('Earphone')
+        setPrice('')
+        setOfferPrice('')
+      } else {
+        alert('Failed to add product')
+      }
+    } catch (err) {
+      console.error('Error uploading product:', err)
+      alert('Something went wrong!')
+    }
   }
 
   return (
@@ -34,14 +68,13 @@ const AddProduct = () => {
                   hidden
                 />
                 <Image
-                  key={index}
-                  className="max-w-24 cursor-pointer"
+                  className="max-w-24 cursor-pointer rounded border"
                   src={
                     files[index]
                       ? URL.createObjectURL(files[index])
-                      : assets.upload_area
+                      : assets.upload_area // ✅ Placeholder from imported assets
                   }
-                  alt=""
+                  alt={`Upload image ${index + 1}`}
                   width={100}
                   height={100}
                 />
@@ -49,6 +82,7 @@ const AddProduct = () => {
             ))}
           </div>
         </div>
+
         <div className="flex flex-col gap-1 max-w-md">
           <label className="text-base font-medium" htmlFor="product-name">
             Product Name
@@ -63,6 +97,7 @@ const AddProduct = () => {
             required
           />
         </div>
+
         <div className="flex flex-col gap-1 max-w-md">
           <label
             className="text-base font-medium"
@@ -80,6 +115,7 @@ const AddProduct = () => {
             required
           ></textarea>
         </div>
+
         <div className="flex items-center gap-5 flex-wrap">
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="category">
@@ -89,7 +125,7 @@ const AddProduct = () => {
               id="category"
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
               onChange={(e) => setCategory(e.target.value)}
-              defaultValue={category}
+              value={category}
             >
               <option value="Earphone">Earphone</option>
               <option value="Headphone">Headphone</option>
@@ -100,6 +136,7 @@ const AddProduct = () => {
               <option value="Accessories">Accessories</option>
             </select>
           </div>
+
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="product-price">
               Product Price
@@ -114,6 +151,7 @@ const AddProduct = () => {
               required
             />
           </div>
+
           <div className="flex flex-col gap-1 w-32">
             <label className="text-base font-medium" htmlFor="offer-price">
               Offer Price
@@ -129,6 +167,7 @@ const AddProduct = () => {
             />
           </div>
         </div>
+
         <button
           type="submit"
           className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded"
@@ -136,7 +175,6 @@ const AddProduct = () => {
           ADD
         </button>
       </form>
-      {/* <Footer /> */}
     </div>
   )
 }

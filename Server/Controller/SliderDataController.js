@@ -2,59 +2,34 @@ const SliderData = require('../Modal/SliderModel')
 
 const SliderDataController = async (req, res) => {
   try {
-    console.log('Request Body:', req.body)
-    console.log('Uploaded File:', req.file)
+    const { filename } = req.file
 
-    // const title = req.body.title
-    // const description = req.body.description
-
-    // Safely get the uploaded image filename
-    const image = req.file?.filename || null
-
-    if (!image) {
-      return res.status(400).json({
-        status: false,
-        message: 'Missing required fields (image, title, or description)',
-      })
-    }
-    const sliderData = new SliderData({
-      image: req.file.filename, // Save as "Image" in DB
-      // title,
-      // description,
+    const newSlider = new SliderData({
+      image: filename,
     })
 
-    await sliderData.save() // Save to MongoDB
+    await newSlider.save()
 
-    res.status(200).json({
-      status: true,
-      message: 'Slider data saved successfully',
-      data: sliderData,
-    })
+    res
+      .status(201)
+      .json({ status: true, message: 'Image uploaded', data: newSlider })
   } catch (error) {
-    console.error('Server error:', error)
-    res.status(500).json({
-      status: false,
-      message: 'Internal server error',
-      error: error.message,
-    })
+    console.error('Error uploading slider image:', error)
+    res.status(500).json({ status: false, message: 'Server error' })
   }
 }
 
 const getSliderData = async (req, res) => {
   try {
-    const sliderData = await SliderData.find()
+    const data = await SliderData.find()
     res.status(200).json({
       status: true,
+      data,
       message: 'Slider data retrieved successfully',
-      data: sliderData,
     })
   } catch (error) {
-    console.error('Server error:', error)
-    res.status(500).json({
-      status: false,
-      message: 'Internal server error',
-      error: error.message,
-    })
+    console.error('Error fetching slider data:', error)
+    res.status(500).json({ status: false, message: 'Server error' })
   }
 }
 
