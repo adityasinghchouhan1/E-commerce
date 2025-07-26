@@ -7,11 +7,13 @@ const HomeProducts = () => {
 
   return (
     <div className="flex flex-col items-center pt-14">
-      <p className="text-4xl font-medium text-left w-full ps-5">
-        Popular products
+      <p className="text-4xl font-semibold text-center w-full ps-5">
+        Popular Products
       </p>
+      <div className="w-28 h-0.5 bg-[#2B4C3F] hover:bg-[#1f3a30] mt-2"></div>
+
       <div
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 flex-col items-center gap-10 mt-6 pb-14 w-full p-6"
+        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 flex-col items-center gap-10 mt-6 pb-14 w-full sm:p-6 p-0"
         style={{
           backgroundImage: `url(${bg.src})`,
           backgroundSize: 'cover',
