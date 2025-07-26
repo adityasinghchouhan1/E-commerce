@@ -8,6 +8,7 @@ import FeaturedProduct from '@/components/FeaturedProduct'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/content/Footer'
 import MainSlider from '@/components/content/NewsCarousel'
+import WhyKapiva from '@/components/content/Whykapiva'
 const Home = () => {
   return (
     <>
@@ -15,6 +16,7 @@ const Home = () => {
       <div className="px-6 md:px-10 lg:px-0">
         <HeaderSlider />
         <HomeProducts />
+         <WhyKapiva/>
         <FeaturedProduct />
         <MainSlider />
         {/* <NewsLetter /> */}

@@ -6,7 +6,7 @@ const WhyKapiva = () => {
     <section className="relative bg-white  py-16">
       {/* Heading */}
       <h2 className="text-3xl sm:text-4xl font-bold text-black text-center">
-        Why Kapiva?
+        Why VaidyaDeep?
       </h2>
       <p className="text-center text-lg sm:text-xl mt-2 text-[#B97E63] tracking-widest">
         HEALTHY INSIDE, HAPPY OUTSIDE
