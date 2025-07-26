@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import ProductCard from '../../components/ProductCard' // adjust path if needed
-import Navbar from '@/components/Navbar'
+import Navbar2 from '@/components/content/Nav'
 import Footer from '@/components/content/Footer'
 
 const AllProducts = () => {
@@ -30,7 +30,7 @@ const AllProducts = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar2 />
 
       <div className="flex flex-col items-start px-6 md:px-16 lg:px-16">
         <div className="flex flex-col items-end pt-12">
