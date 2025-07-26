@@ -54,7 +54,7 @@ Router.post('/Product', upload.array('images', 4), addProduct)
 Router.get('/Productget/:id', getProductbyid)
 Router.get('/Productget', getAllProducts)
 Router.get('/Productget/category/:category', getProductsByCategory)
-Router.delete('Productdelete/:id', deleteProduct)
-Router.put('Productupdate/:id', upload.array('images', 4), updateProduct)
+Router.delete('/Productdelete/:id', deleteProduct)
+Router.put('/Productupdate/:id', upload.array('images', 4), updateProduct)
 
 module.exports = Router

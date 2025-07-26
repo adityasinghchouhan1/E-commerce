@@ -76,20 +76,28 @@ const deleteProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { name, description, category, price, offerPrice } = req.body
-    const images = req.files?.length
-      ? req.files.map((file) => file.path)
-      : undefined
 
+    // Prepare update object
     const updatedData = { name, description, category, price, offerPrice }
-    if (images) updatedData.images = images
 
-    const product = await Product.findByIdAndUpdate(
+    // If new images are uploaded, replace old ones
+    if (req.files && req.files.length > 0) {
+      updatedData.images = req.files.map((file) => file.path)
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       updatedData,
       { new: true }
     )
 
-    res.status(200).json({ success: true, product })
+    if (!updatedProduct) {
+      return res
+        .status(404)
+        .json({ success: false, message: 'Product not found' })
+    }
+
+    res.status(200).json({ success: true, product: updatedProduct })
   } catch (error) {
     res.status(500).json({ success: false, message: error.message })
   }
