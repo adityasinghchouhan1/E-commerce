@@ -1,12 +1,12 @@
-'use client';
+// 'use client';
 
-import React from 'react';
-import Image from 'next/image';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
+import React from 'react'
+import Image from 'next/image'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper/modules'
 
-import 'swiper/css';
-import 'swiper/css/pagination';
+import 'swiper/css'
+import 'swiper/css/pagination'
 
 const NewsCarousel = () => {
   const newsItems = [
@@ -15,18 +15,22 @@ const NewsCarousel = () => {
       text: 'Kapiva Dia Free Juice innovation to manage',
     },
     {
- logo: '/unlockbanner.webp',      text: 'Featured Kapiva building the Ingestible Skincare Trend',
+      logo: '/unlockbanner.webp',
+      text: 'Featured Kapiva building the Ingestible Skincare Trend',
     },
     {
- logo: '/unlockbanner.webp',      text: 'Featured the launch of Kapiva Skin Foods',
+      logo: '/unlockbanner.webp',
+      text: 'Featured the launch of Kapiva Skin Foods',
     },
     {
- logo: '/unlockbanner.webp',      text: 'Featured Kapiva’s products as must-have nutritional supplements',
+      logo: '/unlockbanner.webp',
+      text: 'Featured Kapiva’s products as must-have nutritional supplements',
     },
     {
- logo: '/unlockbanner.webp',      text: 'Featured Effective Lifestyle Trends by Kapiva',
+      logo: '/unlockbanner.webp',
+      text: 'Featured Effective Lifestyle Trends by Kapiva',
     },
-  ];
+  ]
 
   return (
     <section className="bg-white py-16 px-4 sm:px-8 md:px-16">
@@ -40,7 +44,9 @@ const NewsCarousel = () => {
         <p className="text-base text-[#B97E63] tracking-wider">
           Improving health with Ayurveda
         </p>
-        <h3 className="text-4xl sm:text-5xl font-bold text-[#B97E63] mt-2">2M+</h3>
+        <h3 className="text-4xl sm:text-5xl font-bold text-[#B97E63] mt-2">
+          2M+
+        </h3>
         <p className="text-lg font-semibold text-[#B97E63]">
           HAPPY AYURVEDA CONSUMERS
         </p>
@@ -58,6 +64,7 @@ const NewsCarousel = () => {
           1280: { slidesPerView: 4 },
         }}
         className="px-2"
+          
       >
         {newsItems.map((item, index) => (
           <SwiperSlide key={index}>
@@ -76,7 +83,7 @@ const NewsCarousel = () => {
         ))}
       </Swiper>
     </section>
-  );
-};
+  )
+}
 
-export default NewsCarousel;
+export default NewsCarousel

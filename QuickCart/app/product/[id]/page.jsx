@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { assets } from '@/assets/assets'
 import ProductCard from '@/components/ProductCard'
 import Navbar from '@/components/Navbar'
-import Footer from '@/components/Footer'
+import Footer from '@/components/content/Footer'
 import Image from 'next/image'
 import { useParams } from 'next/navigation'
 import Loading from '@/components/Loading'
@@ -72,26 +72,27 @@ const Product = () => {
               />
             </div>
 
-           <div className="grid grid-cols-4 gap-4">
-  {productData.images.map((image, index) => (
-    <div
-      key={index}
-      onClick={() =>
-        setMainImage(`http://localhost:8008/${image.replace(/\\/g, '/')}`)
-      }
-      className="cursor-pointer rounded-lg overflow-hidden bg-gray-500/10 w-full aspect-square"
-    >
-      <Image
-        src={`http://localhost:8008/${image.replace(/\\/g, '/')}`}
-        alt={`Product ${index + 1}`}
-        width={200}
-        height={200}
-        className="object-cover w-full h-full"
-      />
-    </div>
-  ))}
-</div>
-
+            <div className="grid grid-cols-4 gap-4">
+              {productData.images.map((image, index) => (
+                <div
+                  key={index}
+                  onClick={() =>
+                    setMainImage(
+                      `http://localhost:8008/${image.replace(/\\/g, '/')}`
+                    )
+                  }
+                  className="cursor-pointer rounded-lg overflow-hidden bg-gray-500/10 w-full aspect-square"
+                >
+                  <Image
+                    src={`http://localhost:8008/${image.replace(/\\/g, '/')}`}
+                    alt={`Product ${index + 1}`}
+                    width={200}
+                    height={200}
+                    className="object-cover w-full h-full"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="flex flex-col">
@@ -167,7 +168,7 @@ const Product = () => {
                   addToCart(productData._id)
                   router.push('/cart')
                 }}
-                className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition"
+                className="w-full py-3.5 bg-[#2B4C3F] hover:bg-[#1f3a30] text-white transition"
               >
                 Buy now
               </button>
@@ -178,9 +179,9 @@ const Product = () => {
           <div className="flex flex-col items-center mb-4 mt-16">
             <p className="text-3xl font-medium">
               Featured{' '}
-              <span className="font-medium text-orange-600">Products</span>
+              <span className="font-medium text-green-600">Products</span>
             </p>
-            <div className="w-28 h-0.5 bg-orange-600 mt-2"></div>
+            <div className="w-28 h-0.5 bg-[#2B4C3F] hover:bg-[#1f3a30] mt-2"></div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 pb-14 w-full">
             {products.slice(0, 5).map((product, index) => (

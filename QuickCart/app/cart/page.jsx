@@ -63,7 +63,7 @@ const Cart = () => {
                             <Image
                               src={
                                 Array.isArray(product.image) && product.image[0]
-                                  ? `http://localhost:8008/${product.image[0]}`
+                                  ? `http://localhost:8008/${product?.image?.[0]}`
                                   : '/placeholder.png' // fallback if image not present
                               }
                               alt={product.name}

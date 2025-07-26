@@ -1,14 +1,15 @@
-// ye line add kr dena adi jha bhi footer ko render kraega 
+// ye line add kr dena adi jha bhi footer ko render kraega
 
-{/* <div className="flex flex-col justify-between">
+{
+  /* <div className="flex flex-col justify-between">
         <Footer />
-      </div> */}
+      </div> */
+}
 
+// 'use client';
 
-'use client';
-
-import { ArrowRight, Mail, PhoneCall } from 'lucide-react';
-import Image from 'next/image';
+import { ArrowRight, Mail, PhoneCall } from 'lucide-react'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -42,10 +43,14 @@ export default function Footer() {
         <div className="space-y-4">
           <Image src="/logo.svg" alt="Kapiva Logo" width={100} height={40} />
           <p className="text-sm">
-            No 16-1 and 17-2,<br />
-            Vaishnavi Tech Park,<br />
-            Ambalipura Village,<br />
-            Varthur Hobli, Varthur,<br />
+            No 16-1 and 17-2,
+            <br />
+            Vaishnavi Tech Park,
+            <br />
+            Ambalipura Village,
+            <br />
+            Varthur Hobli, Varthur,
+            <br />
             Bengaluru, Karnataka 560103
           </p>
           <p className="flex items-center gap-2 text-lg font-bold">
@@ -82,13 +87,21 @@ export default function Footer() {
               <ArrowRight className="text-white" />
             </button>
           </div>
-       
+
           <p className="font-semibold">FOLLOW US</p>
           <div className="flex gap-4 text-2xl">
-            <a href="#"><img src="/icons/instagram.svg" className="h-6" /></a>
-            <a href="#"><img src="/icons/facebook.svg" className="h-6" /></a>
-            <a href="#"><img src="/icons/youtube.svg" className="h-6" /></a>
-            <a href="#"><img src="/icons/twitter.svg" className="h-6" /></a>
+            <a href="#">
+              <img src="/icons/instagram.svg" className="h-6" />
+            </a>
+            <a href="#">
+              <img src="/icons/facebook.svg" className="h-6" />
+            </a>
+            <a href="#">
+              <img src="/icons/youtube.svg" className="h-6" />
+            </a>
+            <a href="#">
+              <img src="/icons/twitter.svg" className="h-6" />
+            </a>
           </div>
 
           <p className="pt-4 font-medium">Also available on:</p>
@@ -111,5 +124,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  );
+  )
 }
