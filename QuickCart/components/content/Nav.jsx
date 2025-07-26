@@ -53,7 +53,11 @@ export default function Navbar() {
     },
     { name: 'Men', icon: <User className="w-5 h-5" />, link: '/men' },
     { name: 'Women', icon: <Users className="w-5 h-5" />, link: '/women' },
-    { name: 'Combos', icon: <Layers className="w-5 h-5" />, link: '/combos' },
+    {
+      name: 'Combos',
+      icon: <Layers className="w-5 h-5" />,
+      link: '/comboproduct',
+    },
   ]
 
   return (
@@ -88,7 +92,7 @@ export default function Navbar() {
         </div>
 
         {/* 📦 Icons */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="flex items-center gap-4">
           <Link href="/login" className="border px-4 py-1 rounded">
             LOGIN
           </Link>
@@ -102,14 +106,16 @@ export default function Navbar() {
               </span>
             )}
           </div>
-          {isSeller && (
-            <button
-              onClick={() => router.push('/seller')}
-              className="text-xs border px-4 py-1.5 rounded-full"
-            >
-              Seller Dashboard
-            </button>
-          )}
+          <div className="hidden sm:flex">
+            {isSeller && (
+              <button
+                onClick={() => router.push('/seller')}
+                className="text-xs border px-4 py-1.5 rounded-full"
+              >
+                Seller Dashboard
+              </button>
+            )}
+          </div>
           <button onClick={() => setMobileOpen(true)}>
             <Menu />
           </button>

@@ -53,7 +53,7 @@ Router.put('/updateslider/:id', upload.single('image'), SliderdataUpdate)
 Router.post('/Product', upload.array('images', 4), addProduct)
 Router.get('/Productget/:id', getProductbyid)
 Router.get('/Productget', getAllProducts)
-Router.get('Product/category/:category', getProductsByCategory)
+Router.get('/Productget/category/:category', getProductsByCategory)
 Router.delete('Productdelete/:id', deleteProduct)
 Router.put('Productupdate/:id', upload.array('images', 4), updateProduct)
 

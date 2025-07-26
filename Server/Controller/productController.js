@@ -48,7 +48,14 @@ const getAllProducts = async (req, res) => {
 // Get by Category
 const getProductsByCategory = async (req, res) => {
   try {
-    const products = await Product.find({ category: req.params.category })
+    let products
+
+    if (req.params.category === 'category') {
+      products = await Product.find() // no filter
+    } else {
+      products = await Product.find({ category: req.params.category })
+    }
+
     res.status(200).json({ success: true, products })
   } catch (error) {
     res.status(500).json({ success: false, message: error.message })
