@@ -1,11 +1,8 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { assets } from '@/assets/assets'
-import Image from 'next/image'
-import { useAppContext } from '@/context/AppContext'
-import Footer from '@/components/seller/Footer'
-import Loading from '@/components/Loading'
 import axios from 'axios'
+import { useAppContext } from '@/context/AppContext'
+import Loading from '@/components/Loading'
 
 const ProductList = () => {
   const { router } = useAppContext()
@@ -61,7 +58,6 @@ const ProductList = () => {
       Object.entries(formData).forEach(([key, value]) =>
         form.append(key, value)
       )
-
       newImages.forEach((img) => form.append('images', img))
 
       const res = await axios.put(
@@ -88,26 +84,27 @@ const ProductList = () => {
     fetchSellerProduct()
   }, [])
 
+  if (loading) return <Loading />
+
   return (
-    <div className="overflow-x-auto w-full">
-      <table className="min-w-[900px] w-full text-sm text-left border-collapse">
+    <div className="overflow-x-auto w-full p-4">
+      <table className="w-full table-fixed text-sm text-left border-collapse min-w-[1000px]">
         <thead className="bg-gray-100 text-gray-800">
           <tr>
-            <th className="px-4 py-3 w-60">Name</th>
-            <th className="px-4 py-3 w-40">Image</th>
-
-            <th className="px-4 py-3 w-40">Category</th>
-            <th className="px-4 py-3 w-72">Description</th>
-            <th className="px-4 py-3 w-32">Price</th>
-            <th className="px-4 py-3 w-36">Offer Price</th>
-            <th className="px-4 py-3 w-44">Actions</th>
+            <th className="px-4 py-3 w-[180px]">Name</th>
+            <th className="px-4 py-3 w-[250px]">Image</th>
+            <th className="px-4 py-3 w-[140px]">Category</th>
+            <th className="px-4 py-3 w-[220px]">Description</th>
+            <th className="px-4 py-3 w-[100px]">Price</th>
+            <th className="px-4 py-3 w-[120px]">Offer Price</th>
+            <th className="px-4 py-3 w-[180px]">Actions</th>
           </tr>
         </thead>
         <tbody className="text-gray-700">
           {products.map((product, index) => (
             <tr key={product._id} className="border-t">
-              {/* Product Name Cell */}
-              <td className="p-3">
+              {/* Product Name */}
+              <td className="p-3 align-top">
                 {editIndex === index ? (
                   <input
                     value={formData.name}
@@ -117,7 +114,7 @@ const ProductList = () => {
                         name: e.target.value,
                       }))
                     }
-                    className="border px-2 py-1 rounded text-sm w-[200px]"
+                    className="border px-2 py-1 rounded text-sm w-full"
                     placeholder="Product Name"
                   />
                 ) : (
@@ -127,59 +124,55 @@ const ProductList = () => {
                 )}
               </td>
 
-              {/* Product Images Cell */}
-              <td className="p-3">
-                <div className="flex gap-2 flex-wrap">
-                  {editIndex === index ? (
-                    <>
-                      {/* Existing Images */}
-                      {product.images.map((image, i) => (
-                        <div key={i} className="relative group">
+              {/* Images */}
+              <td className="p-3 align-top">
+                {editIndex === index ? (
+                  <div className="grid grid-cols-2 gap-2">
+                    {[0, 1, 2, 3].map((i) => (
+                      <div key={i} className="flex flex-col items-start gap-1">
+                        {product.images[i] && (
                           <img
-                            src={`http://localhost:8008/${image}`}
+                            src={`http://localhost:8008/${product.images[i]}`}
                             alt={`product-${i}`}
-                            className="w-12 h-12 object-cover rounded border"
+                            className="w-14 h-14 object-cover rounded border"
                           />
-                        </div>
-                      ))}
-
-                      {/* New Image Upload */}
-                      <input
-                        type="file"
-                        multiple
-                        onChange={(e) => setNewImages([...e.target.files])}
-                        className="text-xs mt-1"
-                      />
-
-                      {/* Preview New Images */}
-                      {newImages.length > 0 && (
-                        <div className="flex gap-1 mt-2 flex-wrap">
-                          {Array.from(newImages).map((img, i) => (
-                            <img
-                              key={i}
-                              src={URL.createObjectURL(img)}
-                              alt="preview"
-                              className="w-10 h-10 object-cover rounded border"
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    product.images.map((image, i) => (
+                        )}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const files = [...newImages]
+                            files[i] = e.target.files[0]
+                            setNewImages(files)
+                          }}
+                          className="text-[10px] w-full"
+                        />
+                        {newImages[i] && (
+                          <img
+                            src={URL.createObjectURL(newImages[i])}
+                            alt={`new-preview-${i}`}
+                            className="w-10 h-10 rounded border object-cover mt-1"
+                          />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex gap-1 flex-wrap">
+                    {product.images.map((image, i) => (
                       <img
                         key={i}
                         src={`http://localhost:8008/${image}`}
                         alt={`product-${i}`}
-                        className="w-12 h-12 object-cover rounded border"
+                        className="w-10 h-10 object-cover rounded border"
                       />
-                    ))
-                  )}
-                </div>
+                    ))}
+                  </div>
+                )}
               </td>
 
               {/* Category */}
-              <td className="px-4 py-3 align-top">
+              <td className="p-3 align-top">
                 {editIndex === index ? (
                   <input
                     value={formData.category}
@@ -198,7 +191,7 @@ const ProductList = () => {
               </td>
 
               {/* Description */}
-              <td className="px-4 py-3 align-top">
+              <td className="p-3 align-top">
                 {editIndex === index ? (
                   <textarea
                     rows={2}
@@ -218,7 +211,7 @@ const ProductList = () => {
               </td>
 
               {/* Price */}
-              <td className="px-4 py-3 align-top">
+              <td className="p-3 align-top">
                 {editIndex === index ? (
                   <input
                     type="number"
@@ -238,7 +231,7 @@ const ProductList = () => {
               </td>
 
               {/* Offer Price */}
-              <td className="px-4 py-3 align-top">
+              <td className="p-3 align-top">
                 {editIndex === index ? (
                   <input
                     type="number"
@@ -258,7 +251,7 @@ const ProductList = () => {
               </td>
 
               {/* Actions */}
-              <td className="px-4 py-3 align-top">
+              <td className="p-3 align-top">
                 <div className="flex gap-2 flex-wrap">
                   {editIndex === index ? (
                     <button
