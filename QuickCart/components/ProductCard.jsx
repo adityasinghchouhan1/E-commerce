@@ -9,7 +9,6 @@ const ProductCard = ({ product }) => {
     product?.images?.[0]?.replace(/\\/g, '/') || 'default.jpg'
 
   return (
-    // 1a2e25
     <div
       onClick={() => {
         router.push('/product/' + product._id)
@@ -18,7 +17,7 @@ const ProductCard = ({ product }) => {
       className="flex flex-col items-start gap-2 w-full max-w-[450px] cursor-pointer bg-[#115737] rounded-2xl p-0 shadow-md hover:shadow-lg border border-[#2e7d5d] transition-all duration-300 overflow-hidden"
     >
       {/* Product Image */}
-      <div className="group relative bg-black/20  w-full h-52 overflow-hidden flex items-center justify-center">
+      <div className="group relative bg-black/20 w-full h-52 overflow-hidden flex items-center justify-center">
         <Image
           src={`http://localhost:8008/${normalizedImagePath}`}
           alt={product.name}
@@ -26,10 +25,18 @@ const ProductCard = ({ product }) => {
           height={800}
           className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300"
         />
-        {/* Heart Icon (optional) */}
+
+        {/* ✅ Discount Tag */}
+        {product.discount > 0 && (
+          <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow-md">
+            {product.discount}% OFF
+          </div>
+        )}
+
+        {/* Optional Heart Icon */}
         {/* <button className="absolute top-2 right-2 bg-white p-2 rounded-full shadow-md">
-          <Image className="h-3 w-3" src={assets.heart_icon} alt="heart_icon" />
-        </button> */}
+      <Image className="h-3 w-3" src={assets.heart_icon} alt="heart_icon" />
+    </button> */}
       </div>
 
       {/* Product Info */}
@@ -61,8 +68,13 @@ const ProductCard = ({ product }) => {
         {/* Price & Buy Button */}
         <div className="flex items-center justify-between mt-3">
           <p className="text-white text-base font-semibold">
-            {currency}
-            {product.offerPrice}
+            ₹{product.offerPrice}
+            <span className="text-xs font-normal text-white flex">
+              MRP:
+              <span className="text-xs font-normal text-white line-through ml-2">
+                ₹{product.price}
+              </span>
+            </span>
           </p>
           <button className="px-4 py-1.5 bg-[#2e7d5d] hover:bg-[#256e50] rounded-full text-xs text-white shadow-sm transition-all duration-200">
             Buy now

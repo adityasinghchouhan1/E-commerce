@@ -5,7 +5,8 @@ const addProduct = async (req, res) => {
   console.log('Request Body:', req.body)
   console.log('Uploaded File:', req.files)
   try {
-    const { name, description, category, price, offerPrice } = req.body
+    const { name, description, category, discount, price, offerPrice } =
+      req.body
     const images = req.files.map((file) => file.path)
 
     const product = new Product({
@@ -15,6 +16,7 @@ const addProduct = async (req, res) => {
       price,
       offerPrice,
       images,
+      discount,
     })
 
     await product.save()
@@ -75,10 +77,18 @@ const deleteProduct = async (req, res) => {
 // Update Product
 const updateProduct = async (req, res) => {
   try {
-    const { name, description, category, price, offerPrice } = req.body
+    const { name, description, category, price, offerPrice, discount } =
+      req.body
 
     // Prepare update object
-    const updatedData = { name, description, category, price, offerPrice }
+    const updatedData = {
+      name,
+      description,
+      category,
+      price,
+      offerPrice,
+      discount,
+    }
 
     // If new images are uploaded, replace old ones
     if (req.files && req.files.length > 0) {

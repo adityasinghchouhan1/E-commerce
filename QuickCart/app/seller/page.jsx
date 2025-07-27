@@ -15,6 +15,19 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
+    const numericPrice = parseFloat(price)
+    const numericOfferPrice = parseFloat(offerPrice)
+
+    if (numericOfferPrice >= numericPrice) {
+      alert('Offer price should be less than the actual product price.')
+      return
+    }
+
+    const discount =
+      numericPrice && numericOfferPrice
+        ? Math.round(((numericPrice - numericOfferPrice) / numericPrice) * 100)
+        : 0
+
     const formData = new FormData()
     files.forEach((file) => formData.append('images', file))
     formData.append('name', name)
@@ -22,6 +35,7 @@ const AddProduct = () => {
     formData.append('category', category)
     formData.append('price', price)
     formData.append('offerPrice', offerPrice)
+    formData.append('discount', discount) // ✅ Append discount
 
     try {
       const res = await axios.post(
