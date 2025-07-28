@@ -1,13 +1,13 @@
 const Product = require('../Modal/productModel')
 
+
 // Add Product
 const addProduct = async (req, res) => {
-  console.log('Request Body:', req.body)
-  console.log('Uploaded File:', req.files)
   try {
-    const { name, description, category, discount, price, offerPrice } =
-      req.body
-    const images = req.files.map((file) => file.path)
+    const { name, description, category, price, offerPrice, discount } = req.body;
+
+    const images = req.files.images ? req.files.images.map(file => file.path) : [];
+    const video = req.files.video && req.files.video[0] ? req.files.video[0].path : '';
 
     const product = new Product({
       name,
@@ -15,16 +15,18 @@ const addProduct = async (req, res) => {
       category,
       price,
       offerPrice,
-      images,
       discount,
-    })
+      images,
+      video,
+    });
 
-    await product.save()
-    res.status(201).json({ success: true, product })
+    await product.save();
+    res.status(201).json({ success: true, product });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message })
+    console.error('Add product error:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
 // In your backend route file
 //
@@ -77,41 +79,33 @@ const deleteProduct = async (req, res) => {
 // Update Product
 const updateProduct = async (req, res) => {
   try {
-    const { name, description, category, price, offerPrice, discount } =
-      req.body
+    const { name, description, category, price, offerPrice, discount } = req.body;
 
-    // Prepare update object
-    const updatedData = {
+    const updatedFields = {
       name,
       description,
       category,
       price,
       offerPrice,
       discount,
+    };
+
+    if (req.files.images) {
+      updatedFields.images = req.files.images.map(file => file.path);
     }
 
-    // If new images are uploaded, replace old ones
-    if (req.files && req.files.length > 0) {
-      updatedData.images = req.files.map((file) => file.path)
+    if (req.files.video && req.files.video[0]) {
+      updatedFields.video = req.files.video[0].path;
     }
 
-    const updatedProduct = await Product.findByIdAndUpdate(
-      req.params.id,
-      updatedData,
-      { new: true }
-    )
+    const product = await Product.findByIdAndUpdate(req.params.id, updatedFields, { new: true });
 
-    if (!updatedProduct) {
-      return res
-        .status(404)
-        .json({ success: false, message: 'Product not found' })
-    }
-
-    res.status(200).json({ success: true, product: updatedProduct })
+    res.status(200).json({ success: true, product });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message })
+    console.error('Update product error:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
 module.exports = {
   addProduct,

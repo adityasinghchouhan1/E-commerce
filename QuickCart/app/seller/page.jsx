@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import axios from 'axios'
 import Image from 'next/image'
 import { assets } from '@/assets/assets' // ✅ Import your placeholder image
@@ -11,6 +11,12 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone')
   const [price, setPrice] = useState('')
   const [offerPrice, setOfferPrice] = useState('')
+  const [video, setVideo] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const videoPreviewUrl = useMemo(() => {
+    return video ? URL.createObjectURL(video) : null
+  }, [video])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -35,9 +41,13 @@ const AddProduct = () => {
     formData.append('category', category)
     formData.append('price', price)
     formData.append('offerPrice', offerPrice)
-    formData.append('discount', discount) // ✅ Append discount
+    formData.append('discount', discount)
+    if (video) {
+      formData.append('video', video)
+    }
 
     try {
+      setLoading(true)
       const res = await axios.post(
         'http://localhost:8008/api/Product',
         formData,
@@ -54,12 +64,15 @@ const AddProduct = () => {
         setCategory('Earphone')
         setPrice('')
         setOfferPrice('')
+        setVideo(null)
       } else {
         alert('Failed to add product')
       }
     } catch (err) {
       console.error('Error uploading product:', err)
       alert('Something went wrong!')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -86,7 +99,7 @@ const AddProduct = () => {
                   src={
                     files[index]
                       ? URL.createObjectURL(files[index])
-                      : assets.upload_area // ✅ Placeholder from imported assets
+                      : assets.upload_area
                   }
                   alt={`Upload image ${index + 1}`}
                   width={100}
@@ -95,6 +108,30 @@ const AddProduct = () => {
               </label>
             ))}
           </div>
+        </div>
+
+        <div>
+          <p className="text-base font-medium">Product Video (optional)</p>
+          <label htmlFor="productVideo">
+            <input
+              type="file"
+              id="productVideo"
+              accept="video/*"
+              hidden
+              onChange={(e) => setVideo(e.target.files[0])}
+            />
+            <div className="mt-2 border rounded p-2 cursor-pointer w-max">
+              {videoPreviewUrl ? (
+                <video
+                  src={videoPreviewUrl}
+                  controls
+                  className="max-w-xs max-h-40 rounded"
+                />
+              ) : (
+                <p className="text-sm text-gray-500">Click to upload a video</p>
+              )}
+            </div>
+          </label>
         </div>
 
         <div className="flex flex-col gap-1 max-w-md">
@@ -113,10 +150,7 @@ const AddProduct = () => {
         </div>
 
         <div className="flex flex-col gap-1 max-w-md">
-          <label
-            className="text-base font-medium"
-            htmlFor="product-description"
-          >
+          <label className="text-base font-medium" htmlFor="product-description">
             Product Description
           </label>
           <textarea
@@ -185,9 +219,12 @@ const AddProduct = () => {
 
         <button
           type="submit"
-          className="px-8 py-2.5 bg-orange-600 text-white font-medium rounded"
+          className={`px-8 py-2.5 text-white font-medium rounded ${
+            loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-orange-600'
+          }`}
+          disabled={loading}
         >
-          ADD
+          {loading ? 'Uploading, please wait...' : 'ADD'}
         </button>
       </form>
     </div>
