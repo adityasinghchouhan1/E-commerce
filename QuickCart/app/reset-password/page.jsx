@@ -1,18 +1,33 @@
 'use client'
 
 import { useState } from 'react'
+import axios from 'axios'
 
 const ResetPassword = () => {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
 
-  const handleReset = (e) => {
+  const handleReset = async (e) => {
     e.preventDefault()
-    console.log('Sending reset link to:', email)
-    setMessage(`If ${email} exists, a reset link has been sent.`)
-    // TODO: Replace with real API call
-  }
+    setMessage('') // clear old messages
 
+    try {
+      const response = await axios.post(
+        'http://localhost:8008/api/login/send-reset-password',
+        {
+          email,
+        }
+      )
+
+      setMessage(response.data.message)
+    } catch (error) {
+      console.error(error)
+      setMessage(
+        error.response?.data?.message ||
+          'Something went wrong. Please try again later.'
+      )
+    }
+  }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
@@ -28,7 +43,7 @@ const ResetPassword = () => {
               required
             />
           </div>
-          <button className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+          <button className="w-full bg-[#115737] text-white py-2 rounded hover:bg-green-700">
             Send Reset Link
           </button>
         </form>
