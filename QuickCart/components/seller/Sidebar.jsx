@@ -9,6 +9,7 @@ const SideBar = () => {
   const menuItems = [
     { name: 'Add Product', path: '/seller', icon: assets.add_icon },
     { name: 'Add Slider Image', path: '/seller/slider', icon: assets.add_icon },
+    { name: 'Add coupons', path: '/seller/coupons', icon: assets.add_icon },
     {
       name: 'Product List',
       path: '/seller/product-list',
@@ -27,7 +28,7 @@ const SideBar = () => {
             <div
               className={`flex items-center py-3 px-4 gap-3 ${
                 isActive
-                  ? 'border-r-4 md:border-r-[6px] bg-orange-600/10 border-orange-500/90'
+                  ? 'border-r-4 md:border-r-[6px] bg-green-600/10 border-green-500/90'
                   : 'hover:bg-gray-100/90 border-white'
               }`}
             >

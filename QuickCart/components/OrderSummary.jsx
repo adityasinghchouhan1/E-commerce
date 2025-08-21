@@ -1,6 +1,7 @@
 import { addressDummyData } from '@/assets/assets'
 import { useAppContext } from '@/context/AppContext'
 import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const OrderSummary = () => {
   const { currency, router, getCartCount, getCartAmount } = useAppContext()
@@ -8,6 +9,11 @@ const OrderSummary = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   const [userAddresses, setUserAddresses] = useState([])
+
+  // 👉 Coupon states
+  const [promoCode, setPromoCode] = useState('')
+  const [discount, setDiscount] = useState(0)
+  const [message, setMessage] = useState('')
 
   const fetchUserAddresses = async () => {
     setUserAddresses(addressDummyData)
@@ -18,7 +24,41 @@ const OrderSummary = () => {
     setIsDropdownOpen(false)
   }
 
-  const createOrder = async () => {}
+  // 👉 Apply coupon
+  const handleApplyCoupon = async () => {
+    try {
+      const res = await axios.post('http://localhost:8008/api/apply-coupon', {
+        code: promoCode,
+        orderAmount: getCartAmount(),
+      })
+
+      if (res.data.success) {
+        setDiscount(res.data.discount)
+        setMessage('✅ ' + res.data.message)
+      } else {
+        setDiscount(0)
+        setMessage('❌ ' + res.data.message)
+      }
+    } catch (err) {
+      setDiscount(0)
+      setMessage('❌ Invalid coupon')
+    }
+  }
+
+  const createOrder = async () => {
+    // Example order object
+    const order = {
+      items: getCartCount(),
+      amount: getCartAmount(),
+      discount: discount,
+      finalAmount:
+        getCartAmount() + Math.floor(getCartAmount() * 0.02) - discount,
+      address: selectedAddress,
+    }
+
+    console.log('Placing order: ', order)
+    // 👉 Call your order API here
+  }
 
   useEffect(() => {
     fetchUserAddresses()
@@ -31,6 +71,7 @@ const OrderSummary = () => {
       </h2>
       <hr className="border-gray-500/30 my-5" />
       <div className="space-y-6">
+        {/* --- Address Dropdown --- */}
         <div>
           <label className="text-base font-medium uppercase text-gray-600 block mb-2">
             Select Address
@@ -86,6 +127,7 @@ const OrderSummary = () => {
           </div>
         </div>
 
+        {/* --- Coupon Code --- */}
         <div>
           <label className="text-base font-medium uppercase text-gray-600 block mb-2">
             Promo Code
@@ -93,17 +135,26 @@ const OrderSummary = () => {
           <div className="flex flex-col items-start gap-3">
             <input
               type="text"
+              value={promoCode}
+              onChange={(e) => setPromoCode(e.target.value)}
               placeholder="Enter promo code"
               className="flex-grow w-full outline-none p-2.5 text-gray-600 border"
             />
-            <button className="bg-orange-600 text-white px-9 py-2 hover:bg-orange-700">
+            <button
+              onClick={handleApplyCoupon}
+              className="bg-green-600 text-white px-9 py-2 hover:bg-green-700"
+            >
               Apply
             </button>
           </div>
+          {message && (
+            <p className="mt-2 text-sm text-gray-700 font-medium">{message}</p>
+          )}
         </div>
 
         <hr className="border-gray-500/30 my-5" />
 
+        {/* --- Order Details --- */}
         <div className="space-y-4">
           <div className="flex justify-between text-base font-medium">
             <p className="uppercase text-gray-600">Items {getCartCount()}</p>
@@ -123,11 +174,20 @@ const OrderSummary = () => {
               {Math.floor(getCartAmount() * 0.02)}
             </p>
           </div>
+          {discount > 0 && (
+            <div className="flex justify-between text-green-700 font-medium">
+              <p>Discount</p>
+              <p>
+                -{currency}
+                {discount}
+              </p>
+            </div>
+          )}
           <div className="flex justify-between text-lg md:text-xl font-medium border-t pt-3">
             <p>Total</p>
             <p>
               {currency}
-              {getCartAmount() + Math.floor(getCartAmount() * 0.02)}
+              {getCartAmount() + Math.floor(getCartAmount() * 0.02) - discount}
             </p>
           </div>
         </div>
@@ -135,7 +195,7 @@ const OrderSummary = () => {
 
       <button
         onClick={createOrder}
-        className="w-full bg-orange-600 text-white py-3 mt-5 hover:bg-orange-700"
+        className="w-full bg-green-600 text-white py-3 mt-5 hover:bg-green-700"
       >
         Place Order
       </button>

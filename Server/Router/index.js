@@ -32,6 +32,7 @@ const {
   adminLogin,
   sendResetPasswordLink,
 } = require('../Controller/AdminLoginController')
+const { createCoupons, applyCoupon } = require('../Controller/couponController')
 
 //
 Router.post('/save-credentials', adminLoginsave)
@@ -71,5 +72,13 @@ Router.get('/Productget', getAllProducts)
 Router.get('/Productget/category/:category', getProductsByCategory)
 Router.delete('/Productdelete/:id', deleteProduct)
 Router.put('/Productupdate/:id', upload.array('images', 4), updateProduct)
+
+
+// coupons 
+Router.post('/create-coupon',createCoupons)
+Router.post('/apply-coupon',applyCoupon)
+
+
+
 
 module.exports = Router
